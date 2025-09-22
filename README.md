@@ -3,6 +3,14 @@
   * [git-scm.com](https://git-scm.com) 에서 OS별 설치 (Windows, Mac, Linux).
   * 설치 후 `git --version` 으로 정상 동작 확인.
 
+### Github SSH 연동
+   ```bash
+	ssh-keygen -t rsa -b 4096 -C "your_email@realizesoft.co.kr"
+		==> ~./ssh/id_rsa 에 rsa ssh 키 생성 
+
+	Github 사이트 Profile > Settings > SSH and GPG keys 에	생성된 ssh 퍼플릭키를 복사하여 등록
+   ```
+
 ### **사용자 정보 설정 (최초 1회만 필요)**
    ```bash
    git config --global user.name "이름"
@@ -187,7 +195,42 @@ Github 주소 입력 -> 계정 로그인 -> Branch : main 지정 -> Push
 ### PR 클로즈 후
 - 기본 git flow 상은 리모트 개발 브랜치는 삭제하고, 기여자는 자신의 로컬 기능 브랜치를 삭제하면서 끝이 난다.
 
+## 6. 기타 
+### GitHub 대용량 파일 제한과 해결법
+#### 제한사항 
+- 50MB 이상 파일 → push 불가 (에러 발생)
+- 리포지토리 전체 크기 권장 한도: 1GB
+- 대용량 데이터(이미지, 동영상, 바이너리 등)를 Git에 직접 넣으면 성능 저하 + push 실패
 
+#### 해결법 - Git LFS (Large File Storage) 사용
+   ```bash
+	git lfs install
+	git lfs track "*.zip"
+	git add .gitattributes
+	git add largefile.zip
+	git commit -m "Add large file with Git LFS"
+	git push origin main
+   ```
 
+### 이미 추적 중인 파일을 무시하고 싶을 때
+#### 1. 캐시에서 제거 
+   ```bash 
+   git rm --cached <파일명>   <== 폴더일 때는 git rm -r --cached <폴더명>
+   
+   # .gitignore 파일에 해당 파일이나 폴더를 기재 
+   
+   git commit -m ".gitignore 에 새로운 무시 내용 추가"
+   ```
 
+### 민감 정보나 키 값은 절대 커밋하지 말 것
 
+### 커밋 컨벤션
+   ```bash 
+	[작업단위][액션단위] 커밋 메시지 요약 
+	예) [com.hwsc.mda.app][feat] 팝업 컨텍스트 메뉴 숨김 처리 
+	
+	액션 단위 :
+	- feat : 기능 추가, 변경 
+	- fix : 버그 수정
+	- docs : 문서화
+   ```
